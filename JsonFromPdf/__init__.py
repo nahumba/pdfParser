@@ -30,15 +30,13 @@ ThreeChars = 3*OneChar
 #unicodeMap	ISO-8859-8	c:\tmp\xpdfbin-win-3.04\hebrew\ISO-8859-8.unicodeMap
 #unicodeMap	Windows-1255	c:\tmp\xpdfbin-win-3.04\hebrew\Windows-1255.unicodeMap
 ##----- end Hebrew support package
-inputSederPdf = '\\..\\seder040216.pdf'
+#inputSederPdf = '\\..\\seder040216.pdf'
 toolAt ='C:\\tmp\\xpdfbin-win-3.04'
 #you need to install xpdf to use the pdftotext, then add the config sample-xpdfrc , then feed the pdf.
-def extractText():
+def extractText(inputSederPdf):
     callcallcall= [toolAt+"\\bin64\\pdftotext.exe", "-enc","UTF-8", "-cfg", toolAt+"\\doc\\sample-xpdfrc",  toolAt+inputSederPdf]
-    print callcallcall
+    #print callcallcall #debug
     subprocess.call(callcallcall)
-
-    time.sleep(5)
     return
 
 def SaveJsonToFile(data):
@@ -46,7 +44,7 @@ def SaveJsonToFile(data):
         json.dump(data,outfile,ensure_ascii=False)
     return;
 
-def LoadPdf():
+def LoadTextThatWasPdf():
     return open('c:\\tmp\\seder040216.txt','r');
 
 def ParseFileToAST(pdfDump):
@@ -76,9 +74,17 @@ def ParseFileToAST(pdfDump):
     print 'i hope its clear'
     return data;
 
-extractText()
-pdfDump = LoadPdf()
-#print pdfDump.read() # debug
-data = ParseFileToAST(pdfDump)
-SaveJsonToFile(data)
-pdfDump.close()
+
+def CompileSeder(inputSederPdf):
+    extractText(inputSederPdf)
+    pdfDump = LoadTextThatWasPdf()
+    #print pdfDump.read() # debug
+    data = ParseFileToAST(pdfDump)
+    SaveJsonToFile(data)
+    pdfDump.close()
+
+    return;
+
+print 'start'
+CompileSeder('\\..\\seder040216.pdf')
+print 'finish'
